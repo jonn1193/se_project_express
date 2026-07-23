@@ -1,12 +1,15 @@
 const ClothingItem = require("../models/clothingItem");
 const {
   BAD_REQUEST,
+  FORBIDDEN,
   NOT_FOUND,
   SERVER_ERROR,
 } = require("../utils/errors");
 
 const handleServerError = (res) =>
-  res.status(SERVER_ERROR).send({ message: "An error has occurred on the server" });
+  res
+    .status(SERVER_ERROR)
+    .send({ message: "An error has occurred on the server" });
 
 const getItems = (req, res) => {
   ClothingItem.find({})
@@ -37,9 +40,17 @@ const createItem = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
-  ClothingItem.findByIdAndDelete(req.params.itemId)
+  ClothingItem.findById(req.params.itemId)
     .orFail()
-    .then((item) => res.send(item))
+    .then((item) => {
+      if (item.owner.toString() !== req.user._id) {
+        return res
+          .status(FORBIDDEN)
+          .send({ message: "You can only delete your own items" });
+      }
+
+      return item.deleteOne().then(() => res.send(item));
+    })
     .catch((err) => {
       console.error(err);
 
