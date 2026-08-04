@@ -1,33 +1,46 @@
-# WTWR (What to Wear?): Back End
+# WTWR
 
-The back-end project is focused on creating a server for the WTWR application. You'll gain a deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization.
+WTWR is a React app that uses weather data to recommend clothing items for the current conditions. It connects to the WTWR Express API for user authentication, profile updates, clothing items, and likes.
+
+## Project Features
+
+- Weather data from the OpenWeather API
+- Clothing cards filtered by weather type
+- User registration, login, and logout
+- Protected profile route
+- Current user context for profile and card ownership data
+- Add garment modal
+- Edit profile modal
+- Clothing item preview modal
+- Add, delete, like, and unlike clothing items through the backend API
+- Responsive layout based on the project design
+
+## Backend Repository
+
+[WTWR Express API](https://github.com/jonn1193/se_project_express)
 
 ## Running the Project
 
-`npm run start` - to launch the server
+Run the backend API on port 3001, then run this frontend on a separate port:
 
-`npm run dev` - to launch the server with the hot reload feature
+```bash
+npm run dev
+```
 
-### Testing
+## Deployment
 
-Before committing your code, make sure you edit the file `sprint.txt` in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For ex. 12
+[View the project on GitHub Pages](https://jonn1193.github.io/se_project_react/)
 
-## Technologies Used
+## Project Pitch Video
 
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- Validator
-- ESLint with Airbnb style guide
-- Prettier
-- Nodemon
+Check out [this video](https://www.loom.com/share/148adc8ac3354e01a5f4a379b9a5b095), where I describe my project and some challenges I faced while building it.
 
-## Features
+## Technologies
 
-- Connects to a MongoDB database with Mongoose
-- Defines User and ClothingItem schemas and models
-- Validates required fields, string lengths, weather values, and image URLs
-- Provides REST API routes for users and clothing items
-- Supports creating, reading, deleting, liking, and unliking clothing items
-- Handles invalid data, invalid IDs, missing resources, and server errors with JSON responses
+- React
+- Vite
+- React Router
+- CSS
+- JavaScript
+- REST API requests
+- JWT authorization
