@@ -2,26 +2,16 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
-const {
-  BAD_REQUEST,
-  CONFLICT,
-  NOT_FOUND,
-  SERVER_ERROR,
-  UNAUTHORIZED,
-} = require("../utils/errors");
+const BadRequestError = require("../utils/errors/bad-request-error");
+const ConflictError = require("../utils/errors/conflict-error");
+const NotFoundError = require("../utils/errors/not-found-error");
+const UnauthorizedError = require("../utils/errors/unauthorized-error");
 
-const handleServerError = (res) =>
-  res
-    .status(SERVER_ERROR)
-    .send({ message: "An error has occurred on the server" });
-
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   if (!password) {
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Invalid data passed to create user" });
+    return next(new BadRequestError("Invalid data passed to create user"));
   }
 
   return bcrypt
@@ -40,29 +30,23 @@ const createUser = (req, res) => {
       return res.status(201).send(userObject);
     })
     .catch((err) => {
-      console.error(err);
-
       if (err.code === 11000) {
-        return res.status(CONFLICT).send({ message: "Email already exists" });
+        return next(new ConflictError("Email already exists"));
       }
 
       if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: "Invalid data passed to create user" });
+        return next(new BadRequestError("Invalid data passed to create user"));
       }
 
-      return handleServerError(res);
+      return next(err);
     });
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Invalid data passed to login" });
+    return next(new BadRequestError("Invalid data passed to login"));
   }
 
   return User.findUserByCredentials(email, password)
@@ -74,38 +58,32 @@ const login = (req, res) => {
       return res.send({ token });
     })
     .catch((err) => {
-      console.error(err);
-
       if (err.message === "Incorrect email or password") {
-        return res
-          .status(UNAUTHORIZED)
-          .send({ message: "Incorrect email or password" });
+        return next(new UnauthorizedError("Incorrect email or password"));
       }
 
-      return handleServerError(res);
+      return next(err);
     });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => {
-      console.error(err);
-
       if (err.name === "CastError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid user ID" });
+        return next(new BadRequestError("Invalid user ID"));
       }
 
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "User not found" });
+        return next(new NotFoundError("User not found"));
       }
 
-      return handleServerError(res);
+      return next(err);
     });
 };
 
-const updateCurrentUser = (req, res) => {
+const updateCurrentUser = (req, res, next) => {
   const { name, avatar } = req.body;
 
   User.findByIdAndUpdate(
@@ -116,19 +94,15 @@ const updateCurrentUser = (req, res) => {
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => {
-      console.error(err);
-
       if (err.name === "CastError" || err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: "Invalid data passed to update user" });
+        return next(new BadRequestError("Invalid data passed to update user"));
       }
 
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "User not found" });
+        return next(new NotFoundError("User not found"));
       }
 
-      return handleServerError(res);
+      return next(err);
     });
 };
 
