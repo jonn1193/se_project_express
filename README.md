@@ -72,6 +72,9 @@ The API runs locally at `http://localhost:3001`.
 - Frontend repository: [se_project_react](https://github.com/jonn1193/se_project_react)
 - Backend repository: [se_project_express](https://github.com/jonn1193/se_project_express)
 
-## Project Pitch Video
+## Project Pitch Videos
 
-Check out [this video](https://www.loom.com/share/148adc8ac3354e01a5f4a379b9a5b095), where I describe my project and some challenges I faced while building it.
+Check out these videos, where I describe my project and some challenges I faced while building it:
+
+- [WTWR Frontend Project Pitch](https://www.loom.com/share/148adc8ac3354e01a5f4a379b9a5b095)
+- [WTWR Full-Stack Project Pitch](https://www.loom.com/share/ad9175f0604d4741af9a71f224e574f6)
