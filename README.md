@@ -68,7 +68,8 @@ The API runs locally at `http://localhost:3001`.
 
 ## Deployment
 
-- Deployed domain: `https://wtwr2026.ycare.org`
+- Frontend domain: `https://wtwr2026.ycare.org`
+- Backend API: `https://api.wtwr2026.ycare.org`
 - Frontend repository: [se_project_react](https://github.com/jonn1193/se_project_react)
 - Backend repository: [se_project_express](https://github.com/jonn1193/se_project_express)
 
